@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/ezxr/general_fuctions/build",
+  "command": "/usr/bin/g++-7   -isystem /usr/include/opencv  -g   -o CMakeFiles/general_fuctions.dir/combine2images.cc.o -c /home/ezxr/general_fuctions/combine2images.cc",
+  "file": "/home/ezxr/general_fuctions/combine2images.cc"
+}
+]
