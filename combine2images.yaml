@@ -2,10 +2,13 @@
 ---
 
 combineStyle: "image_mask"
-rgb_path: ""
-depth_path: ""
-mask_path: ""
-output_path: ""
+rgb_path: "/media/ezxr/data/tanksandtemples/Barn/images/000001.jpg"
+depth_path: "/media/ezxr/data/tanksandtemples/Barn/masks/000001_mask.png"
+
+image_path: "/media/ezxr/data/tanksandtemples/Palace/images/00509.jpg"
+mask_path: "/media/ezxr/data/tanksandtemples/Palace/masks/00509_mask.png"
+image_out_path: "/media/ezxr/data/tanksandtemples/Palace/semantic/images_masked/0000509.png"
+mask_out_path: "/media/ezxr/data/tanksandtemples/Palace/semantic/org_binary_mask/0000509.jpg.png"
 
 
 # rgb_depth
@@ -22,4 +25,4 @@ K: !!opencv-matrix
 
 # image mask
 mask_alpha: 0.5
-mask_value: [2, 4, 9, 12, 17]
+mask_value: [2, 4, 9, 12, 17, 72, 102]

@@ -27,6 +27,7 @@ int main(int argc, char **argv)
     FileStorage Settings(yaml_path, FileStorage::READ);
     Combine2images *combiner = new Combine2images(Settings);
     string combineStyle = Settings["combineStyle"];
+    cout << "combineStyle " << combineStyle << endl;
     if (!combineStyle.compare("rgb_depth"))
     {
         combiner->combine_rgb_depth();
@@ -59,29 +60,42 @@ int Combine2images::combine_rgb_depth()
 int Combine2images::combine_image_mask()
 {
     int mask_alpha = Settings_["mask_alpha"];
-    Mat image_rgb = imread(Settings_["image_path"], -1);
+    // Mat image_in = imread(Settings_["image_path"], -1);
     Mat image_mask = imread(Settings_["mask_path"], -1);
+    cout << "image_mask.empty() " << image_mask.empty() << image_mask.type() << endl;
+    // cout << "image_in.empty() " << image_in.empty() << image_in.cols << endl;
     vector<int> mask_value;
     Settings_["mask_value"] >> mask_value;
-    cout << "helo" << endl;
-    for (size_t i = 0; i < mask_value.size(); i++)
-    {
-        cout << mask_value[i] << " ";
-    }
-    cout << endl;
+    // cout << "helo" << endl;
+    // for (size_t i = 0; i < mask_value.size(); i++)
+    // {
+    //     cout << mask_value[i] << " ";
+    // }
+    // cout << endl;
 
-    typedef cv::Point3_<uint8_t> Pixel;
-    // Mat_<Pixel> image = Mat::zeros(3, sizes, CV_8UC3);
+    // typedef cv::Point3_<uint8_t> Pixel;
+    typedef uint8_t Pixel;
     image_mask.forEach<Pixel>([&](Pixel &pixel, const int position[]) -> void {
+        uint8_t v = 1;
         for (size_t i = 0; i < mask_value.size(); i++)
         {
-            if(pixel.x == mask_value[i])
+            if (pixel == mask_value[i])
             {
-                pixel.x = pixel.y = pixel.z = 0;
+                pixel  = 0;
                 break;
             }
+            pixel = 255;
         }
+        
     });
+    // Mat image_out;
+    // image_in.copyTo(image_out, image_mask);
+    // string image_out_path(Settings_["image_out_path"]);
+    string mask_out_path(Settings_["mask_out_path"]);
+    // cout << image_out_path << endl;
+    // imwrite(image_out_path, image_out);
+    cout << mask_out_path << endl;
+    imwrite(mask_out_path, image_mask);
 
     return 0;
 }
