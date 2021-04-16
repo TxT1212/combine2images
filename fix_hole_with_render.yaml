@@ -9,3 +9,4 @@ rgb_save_path: /home/txt/result/livingroom3/RGB_fix_hole_1613811946.346479.png
 
 # image mask
 mask_value: [0]
+kernel_size: 9

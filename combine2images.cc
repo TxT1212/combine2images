@@ -87,8 +87,8 @@ int Combine2images::combine_image_rgb_rgb_mask()
             }
         }
     }
-
-    Mat kernel_erode(3, 3, CV_8UC1, 1);
+    int kernel_size = Settings_["kernel_size"];
+    Mat kernel_erode(kernel_size, kernel_size, CV_8UC1, 1);
     // cout << copy_rgb_mask.type() << copy_rgb_mask.empty() << endl;
     // cout << image_mask.empty() << endl;
     dilate(copy_rgb_mask, copy_rgb_mask, kernel_erode);
