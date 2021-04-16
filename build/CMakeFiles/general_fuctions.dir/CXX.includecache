@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/txt/HW3/combine2images/combine2images.cc
+string
+-
+opencv2/core/core.hpp
+-
+opencv2/opencv.hpp
+-
+

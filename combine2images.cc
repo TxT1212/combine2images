@@ -13,6 +13,7 @@ public:
     Combine2images(FileStorage Settings);
     int combine_rgb_depth();
     int combine_image_mask();
+    int combine_image_rgb_rgb_mask();
     ~Combine2images();
 };
 
@@ -36,6 +37,10 @@ int main(int argc, char **argv)
     {
         combiner->combine_image_mask();
     }
+    else if (!combineStyle.compare("rgb_rgb_mask"))
+    {
+        combiner->combine_image_rgb_rgb_mask();
+    }
     else
     {
         cout << "wrong style!" << endl;
@@ -57,9 +62,48 @@ int Combine2images::combine_rgb_depth()
 
     return 0;
 }
+int Combine2images::combine_image_rgb_rgb_mask()
+{
+    Mat image_mask = imread(Settings_["mask_path"], -1); // depth
+    Mat rgb_image_with_hole = imread(Settings_["rgb_image_with_hole"], -1);
+    Mat rgb_image_reference = imread(Settings_["rgb_image_reference"], -1);
+    string rgb_save_path = Settings_["rgb_save_path"];
+    image_mask.convertTo(image_mask, CV_8UC1);
+    Mat copy_rgb_mask(image_mask);
+    image_mask.copyTo(copy_rgb_mask);
+    vector<int> mask_value;
+    Settings_["mask_value"] >> mask_value;
+    for (size_t i = 0; i < image_mask.rows; i++)
+    {
+        for (size_t j = 0; j < image_mask.cols; j++)
+        {
+            if (rgb_image_with_hole.at<Vec3b>(i, j) == Vec3b(0, 0, 0) && image_mask.at<uchar>(i, j))
+            {
+                copy_rgb_mask.at<uchar>(i, j) = 255;
+            }
+            else
+            {
+                copy_rgb_mask.at<uchar>(i, j) = 0;
+            }
+        }
+    }
+
+    Mat kernel_erode(3, 3, CV_8UC1, 1);
+    // cout << copy_rgb_mask.type() << copy_rgb_mask.empty() << endl;
+    // cout << image_mask.empty() << endl;
+    dilate(copy_rgb_mask, copy_rgb_mask, kernel_erode);
+    rgb_image_reference.copyTo(rgb_image_with_hole, copy_rgb_mask);
+    // imshow("1", rgb_image_with_hole);
+    // imshow("3", rgb_image_reference);
+    // imshow("2", copy_rgb_mask);
+    // waitKey();
+    imwrite(rgb_save_path, rgb_image_with_hole);
+
+    return 0;
+}
+
 int Combine2images::combine_image_mask()
 {
-    int mask_alpha = Settings_["mask_alpha"];
     // Mat image_in = imread(Settings_["image_path"], -1);
     Mat image_mask = imread(Settings_["mask_path"], -1);
     cout << "image_mask.empty() " << image_mask.empty() << image_mask.type() << endl;
@@ -81,12 +125,11 @@ int Combine2images::combine_image_mask()
         {
             if (pixel == mask_value[i])
             {
-                pixel  = 0;
+                pixel = 0;
                 break;
             }
             pixel = 255;
         }
-        
     });
     // Mat image_out;
     // image_in.copyTo(image_out, image_mask);

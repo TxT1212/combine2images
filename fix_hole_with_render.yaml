@@ -1,0 +1,11 @@
+%YAML:1.0
+---
+  
+combineStyle: "rgb_rgb_mask"
+mask_path: /home/txt/result/livingroom3/depthHD_1613811946.346479.png
+rgb_image_reference: /home/txt/result/livingroom3/RGB_render_1613811946.346479.png
+rgb_image_with_hole: /home/txt/result/livingroom3/RGB_1613811946.346479.png
+rgb_save_path: /home/txt/result/livingroom3/RGB_fix_hole_1613811946.346479.png
+
+# image mask
+mask_value: [0]
